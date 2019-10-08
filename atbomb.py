@@ -6,8 +6,7 @@ def get_arguments():
     parser = ArgumentParser(
                 description="When an initial foothold is established, it's good to have a lot of scheduled tasks of "
                             "getting your shell back. "
-                            "Old versions of Windows don't have schtasks.exe utility, but they have AT utility.",
-                epilog='made by jesdoe/derstolz')
+                            "Old versions of Windows don't have schtasks.exe utility, but they have AT utility.")
     parser.add_argument('--time', dest='time', required=True,
                         help='Time span to use while generating AT statements, in the following format: 01:45-22:30')
     parser.add_argument('--period', dest='period', required=True,
