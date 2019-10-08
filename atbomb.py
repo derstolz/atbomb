@@ -3,7 +3,11 @@ from argparse import ArgumentParser
 
 
 def get_arguments():
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+                description="When an initial foothold is established, it's good to have a lot of scheduled tasks of "
+                            "getting your shell back. "
+                            "Old versions of Windows don't have schtasks.exe utility, but they have AT utility.",
+                epilog='made by jesdoe/derstolz')
     parser.add_argument('--time', dest='time', required=True,
                         help='Time span to use while generating AT statements, in the following format: 01:45-22:30')
     parser.add_argument('--period', dest='period', required=True,
@@ -56,7 +60,4 @@ if __name__ == "__main__":
     options = get_arguments()
     timespan, period, path = options.time, options.period, options.cmd
     data = '\n'.join(generate_list(timespan, period, path))
-    file_name = 'at.txt'
-    with open(file_name, 'w', encoding='utf-8') as f:
-        f.write(data)
-    print("Results have been saved into " + file_name)
+    print(data)
