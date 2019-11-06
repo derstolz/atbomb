@@ -2,6 +2,7 @@
 import os
 from argparse import ArgumentParser
 from time import sleep
+import sys, subprocess
 
 
 def get_arguments():
@@ -38,4 +39,10 @@ def work(cmd, sleep_timer_in_seconds):
 
 
 options = get_arguments()
-work(options.cmd, int(options.sleep))
+cmd = options.cmd
+sleep_timer = int(options.sleep)
+try:
+    work(cmd, sleep_timer)
+except:
+    # try to restart the process in case of any error
+    subprocess.Popen([sys.argv[0], '--sleep', str(sleep_timer), '--cmd', cmd])
