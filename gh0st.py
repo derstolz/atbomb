@@ -35,8 +35,8 @@ def handle_signal(signal_number, frame):
 def execute_command(cmd):
     try:
         os.system(cmd)
-    except Exception as e:
-        print(e)
+    except:
+        print("Command execution failed: " + cmd)
 
 
 def work_forever(cmd, sleep_timer_in_seconds):
