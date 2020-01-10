@@ -69,4 +69,6 @@ sleep_timer, cmd = get_arguments()
 try:
     work_forever(cmd, sleep_timer)
 except:
+    print('Unexpected error has been received') 
+    print('Hiding and replicating self in a new location')
     disguise()
